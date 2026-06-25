@@ -130,3 +130,86 @@ function renderGame() {
         discardPileDiv.innerHTML = '<span>Lixo</span>';
     }
 }
+// 1. Configuração do seu Firebase (Pegue estes dados no Console do Firebase)
+const firebaseConfig = {
+    apiKey: "AIzaSyCIeypbWmkoaV2b9Kpk2Wgbc4EPuFW9Mko",
+    authDomain: "jogo-de-cartas-baralho.firebaseapp.com",
+    projectId: "jogo-de-cartas-baralho",
+    storageBucket: "jogo-de-cartas-baralho.firebasestorage.app",
+    messagingSenderId: "820272228547",
+    appId: "1:820272228547:web:e5beebe2e5b7231d7f1a76"
+};
+
+// Inicializa o Firebase e o Firestore
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// Variáveis de controle do jogo local
+let idSalaAtual = "sala_teste_pif";
+let meuIdJogador = "jogador_1"; // Em um sistema real, viria do Firebase Auth
+
+// --- FUNÇÃO 1: CRIAR OU ENTRAR EM UMA SALA ---
+function conectarAoJogo() {
+    const salaRef = db.collection('salas').doc(idSalaAtual);
+
+    // Ouvir as atualizações da sala em Tempo Real (Realtime Listener)
+    salaRef.onSnapshot((doc) => {
+        if (doc.exists) {
+            const dadosDaSala = doc.data();
+            console.log("Dados atualizados da sala:", dadosDaSala);
+            
+            // 1. Atualiza o lixo na tela sempre que mudar no banco
+            discardPile = dadosDaSala.lixo || [];
+            
+            // 2. Verifica se é o meu turno
+            if (dadosDaSala.turno === meuIdJogador) {
+                console.log("É a sua vez de jogar!");
+            }
+            
+            renderGame();
+        } else {
+            // Se a sala não existe no banco de dados, nós a criamos aqui
+            criarNovaSala();
+        }
+    });
+}
+
+// --- FUNÇÃO 2: INICIALIZAR UMA SALA NO BANCO ---
+function criarNovaSala() {
+    db.collection('salas').doc(idSalaAtual).set({
+        status: "aguardando",
+        turno: meuIdJogador,
+        lixo: [], // Começa sem nenhuma carta no lixo
+        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(() => console.log("Nova sala de Pif criada com sucesso no Firestore!"))
+    .catch((error) => console.error("Erro ao criar sala:", error));
+}
+
+// --- FUNÇÃO 3: MODIFICANDO O DESCARTE PARA ATUALIZAR O FIRESTORE ---
+function discardCard(index) {
+    if (playerHand.length < 1) return;
+
+    const cartaDescartada = playerHand[index];
+    playerHand.splice(index, 1); // Remove da mão local
+    
+    // Adiciona ao topo do lixo local
+    discardPile.push(cartaDescartada);
+
+    // ATUALIZA NO FIRESTORE: Isso faz a carta aparecer na tela do outro jogador na hora
+    db.collection('salas').doc(idSalaAtual).update({
+        lixo: discardPile,
+        turno: "jogador_2" // Passa o turno para o oponente (Exemplo)
+    })
+    .then(() => {
+        console.log("Jogada salva no Firestore!");
+    })
+    .catch((error) => {
+        console.error("Erro ao descartar carta:", error);
+    });
+
+    renderGame();
+}
+
+// Chame esta função ao carregar a página para ativar o multiplayer
+conectarAoJogo();
