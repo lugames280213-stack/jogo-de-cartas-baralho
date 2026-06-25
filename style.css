@@ -1,0 +1,149 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #1e1e1e;
+    color: white;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.screen {
+    display: none;
+    height: 100%;
+    width: 100%;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Tela Inicial --- */
+#home-screen {
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, #2a5a3b 0%, #112b18 100%);
+}
+
+#home-screen h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.menu-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 300px;
+}
+
+button {
+    padding: 15px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #f39c12;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #e67e22;
+    transform: scale(1.05);
+}
+
+.btn-danger { background-color: #e74c3c; padding: 10px; }
+.btn-success { background-color: #2ecc71; }
+
+/* --- Tela do Jogo --- */
+#game-screen {
+    background: radial-gradient(circle, #357a38 0%, #1a431c 100%);
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.game-table {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.table-center {
+    display: flex;
+    gap: 30px;
+}
+
+.card-pile {
+    width: 80px;
+    height: 120px;
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+#deck {
+    background: repeating-linear-gradient(45deg, #2980b9, #2980b9 10px, #3498db 10px, #3498db 20px);
+    border: 2px solid white;
+}
+
+/* --- Cartas --- */
+.hand {
+    display: flex;
+    gap: -40px; /* Cartas sobrepostas */
+    justify-content: center;
+    min-height: 130px;
+}
+
+.card {
+    width: 80px;
+    height: 120px;
+    background-color: white;
+    color: black;
+    border-radius: 8px;
+    box-shadow: -2px 2px 10px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-left: -30px; /* Efeito de leque */
+    cursor: pointer;
+    transition: transform 0.2s;
+    user-select: none;
+}
+
+.card:first-child { margin-left: 0; }
+.card:hover { transform: translateY(-15px); z-index: 10; }
+
+.card.red { color: #e74c3c; }
+.card.black { color: #2c3e50; }
+
+.opponent .card {
+    background: repeating-linear-gradient(45deg, #c0392b, #c0392b 10px, #e74c3c 10px, #e74c3c 20px);
+    color: transparent;
+    cursor: default;
+}
+.opponent .card:hover { transform: none; }
+
+.action-buttons { margin-top: 15px; display: flex; gap: 10px;}
