@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pif Online Pro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="home-screen" class="screen active">
+        <h1>🃏 Pif Online Pro</h1>
+        <div class="menu-options">
+            <button onclick="startGame('ia')">Jogar contra IA</button>
+            <button onclick="alert('Em breve: Multiplayer com Socket.io!')">Multiplayer Online</button>
+            <button onclick="alert('Loja e Perfil exigem banco de dados.')">Loja / Perfil</button>
+        </div>
+    </div>
+
+    <div id="game-screen" class="screen">
+        <header class="game-header">
+            <div class="player-info">Jogador 1 <span id="coin-balance">🪙 100</span></div>
+            <div id="timer">Tempo: 30s</div>
+            <button onclick="exitGame()" class="btn-danger">Sair</button>
+        </header>
+
+        <main class="game-table">
+            <div id="opponent-hand" class="hand opponent"></div>
+
+            <div class="table-center">
+                <div id="deck" class="card-pile" onclick="drawCard()">
+                    <span>Monte</span>
+                </div>
+                <div id="discard-pile" class="card-pile">
+                    <span>Lixo</span>
+                </div>
+            </div>
+
+            <div id="player-hand" class="hand"></div>
+            
+            <div class="action-buttons">
+                <button onclick="organizeHand()">Organizar Mão</button>
+                <button onclick="checkBatida()" class="btn-success">Bater!</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
